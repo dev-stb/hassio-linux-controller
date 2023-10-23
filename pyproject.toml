@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "hassio-linux-controller"
+version = "0.1.0"
+description = ""
+authors = ["S. Bonzelet <mail@sbonzelet.de>"]
+readme = "README.md"
+packages = [{include = "hassio_linux_controller"}]
+
+[tool.poetry.scripts]
+hassio_lc = 'hassio_linux_controller:main'
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,15 @@
+[program:hassio_linux_controller]
+command=poetry run hassio_lc
+directory=<<your path to the directory cloned, propaly something lile /home/pi/hassio-linux-controller >>
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/supervisor/hassio_linux_controller.log
+redirect_stderr=true
+environment=
+    HASSIO_LINUX_CONTROLLER_HASSIO_URL="<< your hassio url >>"
+    HASSIO_LINUX_CONTROLLER_HASSIO_BEARER_TOKEN="<< your token >>"
+    HASSIO_LINUX_CONTROLLER_DISPLAY_ENTITY_ID=<< your entity id. e.g: input_boolean.magicmirror_display >>
+    HASSIO_LINUX_CONTROLLER_INVOKE_SHUTDOWN_ENTITY_ID=<< your entity id. e.g: input_boolean.magicmirror_screensaver >>
+    HASSIO_LINUX_CONTROLLER_INVOKE_REBOOT_ENTITY_ID=<< your entity id. e.g: input_boolean.magicmirror_screensaver >>
+
+
