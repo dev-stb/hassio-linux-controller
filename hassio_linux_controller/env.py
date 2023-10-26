@@ -1,45 +1,119 @@
 import os
+import argparse
+from dataclasses import dataclass
 
 
-log_level: str = os.environ.get(
-    "HASSIO_LINUX_CONTROLLER_LOG_LEVEL",
-    "INFO",
-).upper()
-url: str = os.environ.get(
-    "HASSIO_LINUX_CONTROLLER_HASSIO_URL",
-    "http://localhost:8123",
-)
-token: str = os.environ.get(
-    "HASSIO_LINUX_CONTROLLER__HASSIO_BEARER_TOKEN",
-    "<please set this token>",
-)
-interval_s: int = int(os.environ.get("HASSIO_LINUX_CONTROLLER_INTERVAL_S", 1))
-display = os.environ.get("HASSIO_LINUX_CONTROLLER_DISPLAY_ID", ":0")
-display_entitiy_id: str = os.environ.get(
-    "HASSIO_LINUX_CONTROLLER_DISPLAY_ENTITY_ID",
-    "",
-)
-invoke_shutdown_entitiy_id: str = os.environ.get(
-    "HASSIO_LINUX_CONTROLLER_INVOKE_SHUTDOWN_ENTITY_ID",
-    "",
-)
-invoke_reboot_entitiy_id: str = os.environ.get(
-    "HASSIO_LINUX_CONTROLLER_INVOKE_REBOOT_ENTITY_ID",
-    "",
-)
+@dataclass(init=True)
+class Configuration:
+    log_level: str
+    url: str
+    token: str
+    interval_s: int
+    display: str
+    display_entity_id: str
+    invoke_shutdown_entity_id: str
+    invoke_reboot_entity_id: str
+    start_kioskmode_firefox_entity_id: str
+    dry_run: bool
 
-start_kioskmode_firefox_entity_id: str = os.environ.get(
-    "HASSIO_LINUX_CONTROLLER_START_KIOSKMODE_FIREFOX_ENTITY_ID",
-    "",
-)
-
-dry_run: bool = os.environ.get(
-    "HASSIO_LINUX_CONTROLLER_DRY_RUN",
-    "false",
-).lower() in ["yes", "true", "t", "1"]
+    @property
+    def headers(self):
+        return {
+            "Authorization": f"Bearer {config.token}",
+            "content_type": "application/json",
+        }
 
 
-headers = {
-    "Authorization": f"Bearer {token}",
-    "content-type": "application/json",
-}
+config: Configuration = None
+
+
+def load() -> None:
+    global config
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--log-level",
+        type=str,
+        default=_get_str_config("LOG_LEVEL", "INFO"),
+        help="Log level",
+    )
+    parser.add_argument(
+        "--url",
+        type=str,
+        default=_get_str_config("HASSIO_URL", "http://localhost:8123"),
+        help="Hassio URL",
+    )
+    parser.add_argument(
+        "--token",
+        type=str,
+        default=_get_str_config("HASSIO_BEARER_TOKEN", "<please set this token>"),
+        help="Hassio bearer token",
+    )
+    parser.add_argument(
+        "--interval-s",
+        type=int,
+        default=_get_int_config("INTERVAL_S", 1),
+        help="Interval in seconds",
+    )
+    parser.add_argument(
+        "--display",
+        type=str,
+        default=_get_str_config("DISPLAY_ID", ":0"),
+        help="Display ID",
+    )
+    parser.add_argument(
+        "--display-entity-id",
+        type=str,
+        default=_get_str_config("DISPLAY_ENTITY_ID", ""),
+        help="Display entity ID",
+    )
+    parser.add_argument(
+        "--invoke-shutdown-entity-id",
+        type=str,
+        default=_get_str_config("INVOKE_SHUTDOWN_ENTITY_ID", ""),
+        help="Invoke shutdown entity ID",
+    )
+    parser.add_argument(
+        "--invoke-reboot-entity-id",
+        type=str,
+        default=_get_str_config("INVOKE_REBOOT_ENTITY_ID", ""),
+        help="Invoke reboot entity ID",
+    )
+    parser.add_argument(
+        "--start-kioskmode-firefox-entity-id",
+        type=str,
+        default=_get_str_config("START_KIOSKMODE_FIREFOX_ENTITY_ID", ""),
+        help="Start kioskmode firefox entity ID",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        default=_get_bool_config("DRY_RUN", False),
+        help="Dry run",
+    )
+
+    args = parser.parse_args()
+
+    config = Configuration(**args.__dict__)
+
+
+def _get_str_config(key: str, default: str = "") -> str:
+    value = default
+    env_value = os.environ.get(
+        f"HASSIO_LINUX_CONTROLLER_{key}",
+        None,
+    )
+    if env_value is not None:
+        value = env_value
+
+    return value
+
+
+def _get_bool_config(key: str, default: bool) -> bool:
+    value = _get_str_config(key, str(default))
+    return value.lower() in ["yes", "true", "t", "1"] if value is str else value
+
+
+def _get_int_config(key: str, default: int) -> int:
+    value = _get_str_config(key, str(default))
+    return int(value)

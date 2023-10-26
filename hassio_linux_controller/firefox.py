@@ -21,7 +21,7 @@ def open_process():
 
 
 def check_process():
-    if not env.dry_run:
+    if not env.config.dry_run:
         global __subprocess
         if __subprocess is None or __subprocess.poll() is not None:
             open_process()
@@ -29,7 +29,7 @@ def check_process():
 
 def kill_process():
     _logger.info("Firefox kill process")
-    if not env.dry_run:
+    if not env.config.dry_run:
         global __subprocess
         if __subprocess is not None:
             __subprocess.kill()
@@ -37,7 +37,7 @@ def kill_process():
 
 
 def loop_step():
-    if api.get_status_of_switch(env.start_kioskmode_firefox_entity_id):
+    if api.get_status_of_switch(env.config.start_kioskmode_firefox_entity_id):
         check_process()
     else:
         kill_process()

@@ -8,16 +8,16 @@ from .models import HassioError
 _logger = logging.getLogger(__name__)
 
 
-def get_status_of_switch(entitiy_id: str) -> bool:
+def get_status_of_switch(entity_id: str) -> bool:
     _logger.debug(
-        f"Checking status of {entitiy_id} in hassio: {env.url}",
+        f"Checking status of {entity_id} in hassio: {env.config.url}",
     )
     response = requests.get(
         urllib.parse.urljoin(
-            env.url,
-            f"api/states/{entitiy_id}",
+            env.config.url,
+            f"api/states/{entity_id}",
         ),
-        headers=env.headers,
+        headers=env.config.headers,
     )
     _logger.debug(
         f"Response: {response.status_code} {response.reason}",
@@ -31,16 +31,16 @@ def get_status_of_switch(entitiy_id: str) -> bool:
     return response_json["state"] == "on"
 
 
-def set_status_of_switch(entitiy_id: str, value: bool) -> None:
+def set_status_of_switch(entity_id: str, value: bool) -> None:
     _logger.debug(
-        f"Set status of {entitiy_id} in hassio: {env.url}",
+        f"Set status of {entity_id} in hassio: {env.config.url}",
     )
     response = requests.post(
         urllib.parse.urljoin(
-            env.url,
-            f"api/states/{entitiy_id}",
+            env.config.url,
+            f"api/states/{entity_id}",
         ),
-        headers=env.headers,
+        headers=env.config.headers,
         json={"state": "on" if value else "off"},
     )
     _logger.debug(
