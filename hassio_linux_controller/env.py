@@ -27,6 +27,12 @@ invoke_reboot_entitiy_id: str = os.environ.get(
     "HASSIO_LINUX_CONTROLLER_INVOKE_REBOOT_ENTITY_ID",
     "",
 )
+
+start_kioskmode_firefox_entity_id: str = os.environ.get(
+    "HASSIO_LINUX_CONTROLLER_START_KIOSKMODE_FIREFOX_ENTITY_ID",
+    "",
+)
+
 dry_run: bool = os.environ.get(
     "HASSIO_LINUX_CONTROLLER_DRY_RUN",
     "false",
