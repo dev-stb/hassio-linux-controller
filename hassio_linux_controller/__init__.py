@@ -9,7 +9,11 @@ from .models import HassioError
 def main():
     try:
         env.load()
-        logging.basicConfig(stream=sys.stdout, level=env.config.log_level)
+        logging.basicConfig(
+            stream=sys.stdout,
+            level=env.config.log_level,
+            format="%(asctime)s %(levelname)s %(name)s %(message)s",
+        )
         _logger = logging.getLogger(__name__)
 
         import hassio_linux_controller.display as display
