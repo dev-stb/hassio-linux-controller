@@ -21,12 +21,12 @@ def set_to(on: bool):
     if not env.config.dry_run:
         process = subprocess.Popen(
             f"xset -display '{env.config.display}' dpms force {set_str}",
-            stdout=subprocess.STDOUT,
-            stderr=subprocess.STDOUT,
-            env={"DISPLAY": env.config.display},
         )
         time.sleep(0.1)
         exit_code = process.poll()
+
+        _logger.info(process.stdout.read())
+        _logger.info(process.stderr.read())
 
         if exit_code != 0:
             _logger.error(
