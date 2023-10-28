@@ -14,9 +14,13 @@ def open_process():
     global __subprocess
     _logger.info("Firefox (re-)open process")
     __subprocess = subprocess.Popen(
-        'firefox --kiosk --marionette "http://home/lovelace-magicmirror/0?wp_enabled=true&&BrowserID=MagicMirror"',
-        stdout=subprocess.STDOUT,
-        stderr=subprocess.STDOUT,
+        [
+            "firefox",
+            "--kiosk",
+            "--marionette",
+            "http://home/lovelace-magicmirror/0?wp_enabled=true&&BrowserID=MagicMirror",
+        ],
+        shell=True,
         env={"DISPLAY": env.config.display},
     )
 
