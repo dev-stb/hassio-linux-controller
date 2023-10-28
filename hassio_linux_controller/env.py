@@ -126,8 +126,14 @@ def _get_str_config(key: str, default: str = "") -> str:
 
 
 def _get_bool_config(key: str, default: bool) -> bool:
-    value = _get_str_config(key, str(default))
-    return value.lower() in ["yes", "true", "t", "1"] if value is str else value
+    return _get_str_config(key, str(default)).lower() in [
+        "1",
+        "t",
+        "y",
+        "on",
+        "yes",
+        "true",
+    ]
 
 
 def _get_int_config(key: str, default: int) -> int:
