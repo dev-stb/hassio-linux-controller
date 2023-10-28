@@ -40,6 +40,8 @@ def kill_process():
     if not env.config.dry_run:
         global __subprocess
         if __subprocess is not None:
+            _logger.info(__subprocess.stdout.read())
+            _logger.info(__subprocess.stderr.read())
             __subprocess.kill()
             __subprocess = None
 
