@@ -19,14 +19,16 @@ def set_to(on: bool):
         _logger.info(f"Display {set_str}")
         __log_state = on
     if not env.config.dry_run:
-        exit_code = subprocess.call(
+        process = subprocess.run(
             f"xset -display '{env.config.display}' dpms force {set_str}",
             shell=True,
+            capture_output=True,
         )
-
-        if exit_code != 0:
+        _logger.info(process.stdout)
+        _logger.info(process.stderr)
+        if process.returncode != 0:
             _logger.error(
-                f"Display {set_str} failed with exit code {exit_code}"
+                f"Display {set_str} failed with exit code {process.returncode}"
             )
 
 
