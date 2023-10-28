@@ -17,7 +17,11 @@ def on():
         _logger.info("Display on")
         __log_state = 1
     if not env.config.dry_run:
-        os.system(f"xset -display {env.config.display} dpms force on")
+        exit_code = os.system(
+            f"xset -display {env.config.display} dpms force on"
+        )
+        if exit_code != 0:
+            _logger.error(f"Display on failed with exit code {exit_code}")
 
 
 def off():
@@ -27,7 +31,11 @@ def off():
         _logger.info("Display off")
         __log_state = 0
     if not env.config.dry_run:
-        os.system(f"xset -display {env.config.display} dpms force off")
+        exit_code = os.system(
+            f"xset -display {env.config.display} dpms force off"
+        )
+        if exit_code != 0:
+            _logger.error(f"Display off failed with exit code {exit_code}")
 
 
 def loop_step():

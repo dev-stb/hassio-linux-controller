@@ -17,15 +17,22 @@ def open_process():
         'firefox --kiosk --marionette "http://home/lovelace-magicmirror/0?wp_enabled=true&&BrowserID=MagicMirror"',
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
-        env={"DISPLAY": ":0"},
+        env={"DISPLAY": env.config.display},
     )
 
 
 def check_process():
     if not env.config.dry_run:
         global __subprocess
-        if __subprocess is None or __subprocess.poll() is not None:
+        if __subprocess is None:
             open_process()
+        else:
+            exit_code = __subprocess.poll()
+            if exit_code is not None:
+                _logger.error(
+                    f"Firefox process exited with exit code {exit_code}"
+                )
+                open_process()
 
 
 def kill_process():
