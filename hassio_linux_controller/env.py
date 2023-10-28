@@ -2,6 +2,9 @@ import os
 import argparse
 from dataclasses import dataclass
 
+# is set later after logging is initialized
+_logger = None
+
 
 @dataclass(init=True)
 class Configuration:
@@ -46,7 +49,9 @@ def load() -> None:
     parser.add_argument(
         "--token",
         type=str,
-        default=_get_str_config("HASSIO_BEARER_TOKEN", "<please set this token>"),
+        default=_get_str_config(
+            "HASSIO_BEARER_TOKEN", "<please set this token>"
+        ),
         help="Hassio bearer token",
     )
     parser.add_argument(
@@ -95,6 +100,17 @@ def load() -> None:
     args = parser.parse_args()
 
     config = Configuration(**args.__dict__)
+
+
+def print_config() -> None:
+    global config
+    global _logger
+    if _logger is None:
+        import logging
+
+        _logger = logging.getLogger(__name__)
+
+    _logger.info(f"Configuration: {config=}")
 
 
 def _get_str_config(key: str, default: str = "") -> str:

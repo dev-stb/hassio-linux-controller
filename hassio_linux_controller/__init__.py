@@ -15,6 +15,7 @@ def main():
             format="%(asctime)s %(levelname)s %(name)s %(message)s",
         )
         _logger = logging.getLogger(__name__)
+        env.print_config()
 
         import hassio_linux_controller.display as display
         import hassio_linux_controller.power as power
