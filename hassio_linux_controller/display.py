@@ -15,9 +15,9 @@ def set_to(on: bool):
     global __log_state
     global _logger
     set_str = "on" if on else "off"
-    if __log_state == 0:
+    if __log_state != on:
         _logger.info(f"Display {set_str}")
-        __log_state = 1
+        __log_state = on
     if not env.config.dry_run:
         process = subprocess.Popen(
             f"xset -display '{env.config.display}' dpms force {set_str}",
