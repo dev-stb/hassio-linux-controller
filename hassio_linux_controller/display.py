@@ -20,7 +20,7 @@ def set_to(on: bool):
         __log_state = 1
     if not env.config.dry_run:
         process = subprocess.Popen(
-            f"xset -display {env.config.display} dpms force {set_str}",
+            f"xset -display '{env.config.display}' dpms force {set_str}",
             stdout=subprocess.STDOUT,
             stderr=subprocess.STDOUT,
             env={"DISPLAY": env.config.display},
