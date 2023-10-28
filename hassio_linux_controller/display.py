@@ -7,15 +7,25 @@ import hassio_linux_controller.api as api
 
 _logger = logging.getLogger(__name__)
 
+__log_state = 0
+
 
 def on():
-    _logger.info("Display on")
+    global __log_state
+    global _logger
+    if __log_state == 0:
+        _logger.info("Display on")
+        __log_state = 1
     if not env.config.dry_run:
         os.system(f"xset -display {env.config.display} dpms force on")
 
 
 def off():
-    _logger.info("Display off")
+    global __log_state
+    global _logger
+    if __log_state == 1:
+        _logger.info("Display off")
+        __log_state = 0
     if not env.config.dry_run:
         os.system(f"xset -display {env.config.display} dpms force off")
 
