@@ -25,8 +25,10 @@ def set_to(on: bool):
             text=True,
             capture_output=True,
         )
-        _logger.info(process.stdout)
-        _logger.info(process.stderr)
+        if process.stdout:
+            _logger.warn(process.stdout)
+        if process.stderr:
+            _logger.error(process.stderr)
         if process.returncode != 0:
             _logger.error(
                 f"Display {set_str} failed with exit code {process.returncode}"
