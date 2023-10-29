@@ -22,6 +22,7 @@ def open_process():
             "http://home/lovelace-magicmirror/0?wp_enabled=true&&BrowserID=MagicMirror",
         ],
         shell=True,
+        text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )

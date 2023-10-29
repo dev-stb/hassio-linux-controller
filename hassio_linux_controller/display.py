@@ -22,6 +22,7 @@ def set_to(on: bool):
         process = subprocess.run(
             f"xset -display '{env.config.display}' dpms force {set_str}",
             shell=True,
+            text=True,
             capture_output=True,
         )
         _logger.info(process.stdout)
