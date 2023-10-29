@@ -58,10 +58,20 @@ def kill_process():
             if errors:
                 _logger.error(errors)
             __subprocess.kill()
-            __subprocess = None
+        __subprocess = None
+
+
+__sleep_factor = 60 / env.config.interval_s
+__sleep_counter = 0
 
 
 def loop_step():
+    global __sleep_counter
+    global __sleep_factor
+    if __sleep_counter < __sleep_factor:
+        __sleep_counter += 1
+        return
+    __sleep_counter = 0
     if api.get_status_of_switch(env.config.start_kioskmode_firefox_entity_id):
         check_process()
     else:
