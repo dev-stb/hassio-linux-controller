@@ -21,7 +21,7 @@ def open_process():
                 "--display",
                 f"'{env.config.display}'",
                 "--kiosk",
-                "--marionette",
+                # "--marionette",
                 "'http://home/lovelace-magicmirror/0?BrowserID=MagicMirror'",
             ]
         ),
