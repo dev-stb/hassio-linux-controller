@@ -17,6 +17,7 @@ def open_process():
         " ".join(
             [
                 "firefox",
+                "--sync",
                 "--display",
                 f"'{env.config.display}'",
                 "--kiosk",
@@ -50,9 +51,13 @@ def kill_process():
     if __subprocess is not None:
         _logger.info("Firefox kill process")
         if not env.config.dry_run:
-            _logger.info(__subprocess.stdout.readlines())
-            _logger.info(__subprocess.stderr.readlines())
-            __subprocess.terminate()
+            warn = __subprocess.stdout.readlines()
+            if warn:
+                _logger.warn(warn)
+            errors = __subprocess.stderr.readlines()
+            if errors:
+                _logger.error(errors)
+            __subprocess.kill()
             __subprocess = None
 
 
