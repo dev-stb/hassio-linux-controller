@@ -17,7 +17,6 @@ def open_process():
         " ".join(
             [
                 "firefox",
-                "--sync",
                 "--display",
                 f"'{env.config.display}'",
                 "--kiosk",
