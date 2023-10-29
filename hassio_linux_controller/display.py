@@ -14,13 +14,13 @@ __log_state = 0
 def set_to(on: bool):
     global __log_state
     global _logger
-    set_str = "on" if on else "off"
+    set_str = "auto" if on else "off"
     if __log_state != on:
         _logger.info(f"Display {set_str}")
         __log_state = on
     if not env.config.dry_run:
         process = subprocess.run(
-            f"xset -display '{env.config.display}' dpms force {set_str}",
+            f"xrandr -o left --display '{env.config.display}' --output HDMI-1 --{set_str}",
             shell=True,
             text=True,
             capture_output=True,
