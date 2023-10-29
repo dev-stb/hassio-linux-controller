@@ -35,7 +35,7 @@ def check_process():
         if __subprocess is None:
             open_process()
         else:
-            exit_code = __subprocess.poll()
+            exit_code = __subprocess.returncode
             if exit_code is not None:
                 _logger.error(
                     f"Firefox process exited with exit code {exit_code}"
