@@ -1,13 +1,12 @@
 import os
 import argparse
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 # is set later after logging is initialized
 _logger = None
 
 
-@dataclass(init=True)
-class Configuration:
+class Configuration(BaseModel):
     log_level: str
     url: str
     token: str
@@ -99,7 +98,7 @@ def load() -> None:
 
     args = parser.parse_args()
 
-    config = Configuration(**args.__dict__)
+    config = Configuration.model_validate(args.__dict__)
 
 
 def print_config() -> None:
