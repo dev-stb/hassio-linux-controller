@@ -8,7 +8,7 @@ import hassio_linux_controller.api as api
 
 _logger = logging.getLogger(__name__)
 
-__log_state = 0
+__log_state = None
 
 
 def set_to(on: bool):
