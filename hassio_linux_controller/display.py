@@ -18,21 +18,21 @@ def set_to(on: bool):
     if __log_state != on:
         _logger.info(f"Display {set_str}")
         __log_state = on
-    if not env.config.dry_run:
-        process = subprocess.run(
-            f"xrandr --display '{env.config.display}' --output HDMI-1 --{set_str} --rotate left",
-            shell=True,
-            text=True,
-            capture_output=True,
-        )
-        if process.stdout:
-            _logger.warn(process.stdout)
-        if process.stderr:
-            _logger.error(process.stderr)
-        if process.returncode != 0:
-            _logger.error(
-                f"Display {set_str} failed with exit code {process.returncode}"
+        if not env.config.dry_run:
+            process = subprocess.run(
+                f"xrandr --display '{env.config.display}' --output HDMI-1 --{set_str} --rotate left",
+                shell=True,
+                text=True,
+                capture_output=True,
             )
+            if process.stdout:
+                _logger.warn(process.stdout)
+            if process.stderr:
+                _logger.error(process.stderr)
+            if process.returncode != 0:
+                _logger.error(
+                    f"Display {set_str} failed with exit code {process.returncode}"
+                )
 
 
 def loop_step():
