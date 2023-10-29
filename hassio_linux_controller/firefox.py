@@ -15,8 +15,9 @@ def open_process():
     _logger.info("Firefox (re-)open process")
     __subprocess = subprocess.Popen(
         [
-            "DISPLAY='{env.config.display}'",
             "firefox",
+            "--display",
+            env.config.display,
             "--kiosk",
             "--marionette",
             "http://home/lovelace-magicmirror/0?wp_enabled=true&&BrowserID=MagicMirror",
