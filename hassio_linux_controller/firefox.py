@@ -30,8 +30,8 @@ def open_process():
 
 
 def check_process():
+    global __subprocess
     if not env.config.dry_run:
-        global __subprocess
         if __subprocess is None:
             open_process()
         else:
@@ -44,13 +44,13 @@ def check_process():
 
 
 def kill_process():
-    _logger.info("Firefox kill process")
-    if not env.config.dry_run:
-        global __subprocess
-        if __subprocess is not None:
+    global __subprocess
+    if __subprocess is not None:
+        _logger.info("Firefox kill process")
+        if not env.config.dry_run:
             _logger.info(__subprocess.stdout.readlines())
             _logger.info(__subprocess.stderr.readlines())
-            __subprocess.kill()
+            __subprocess.terminate()
             __subprocess = None
 
 
