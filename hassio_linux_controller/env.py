@@ -62,7 +62,7 @@ def load() -> None:
     parser.add_argument(
         "--display",
         type=str,
-        default=_get_str_config("DISPLAY_ID", ":0"),
+        default=_get_str_config("DISPLAY", ":0", use_app_prefix=False),
         help="Display ID",
     )
     parser.add_argument(
@@ -112,12 +112,17 @@ def print_config() -> None:
     _logger.info(f"Configuration: {config=}")
 
 
-def _get_str_config(key: str, default: str = "") -> str:
+def _get_str_config(
+    key: str,
+    default: str = "",
+    use_app_prefix: bool = True,
+) -> str:
     value = default
-    env_value = os.environ.get(
-        f"HASSIO_LINUX_CONTROLLER_{key}",
-        None,
-    )
+    env_key = key
+    if use_app_prefix:
+        env_key = f"HASSIO_LINUX_CONTROLLER_{key}"
+
+    env_value = os.environ.get(env_key, None)
     if env_value is not None:
         value = env_value
 
