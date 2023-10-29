@@ -20,7 +20,7 @@ def set_to(on: bool):
         __log_state = on
     if not env.config.dry_run:
         process = subprocess.run(
-            f"xrandr -o left --display '{env.config.display}' --output HDMI-1 --{set_str}",
+            f"xrandr --display '{env.config.display}' --output HDMI-1 --{set_str} --rotate left",
             shell=True,
             text=True,
             capture_output=True,
