@@ -59,6 +59,6 @@ def kill_process():
         __subprocess = None
 
 
-def register(client: mqtt.Client):
+def register(client: mqtt.MagicMirrorClient):
     client.add_callback("hassio/firefox/kill", kill_process)
     client.add_callback("hassio/firefox/open", check_process)

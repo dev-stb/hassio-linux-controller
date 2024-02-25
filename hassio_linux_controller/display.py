@@ -40,6 +40,6 @@ def off():
     _set_to(False)
 
 
-def register(client: mqtt.Client):
+def register(client: mqtt.MagicMirrorClient):
     client.add_callback("hassio/display/on", on)
     client.add_callback("hassio/display/off", off)

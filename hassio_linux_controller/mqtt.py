@@ -1,11 +1,11 @@
-import paho.mqtt.client as mqtt
+from paho import mqtt
 
 import logging
 
 __logger = logging.getLogger(__name__)
 
 
-class MagicMirrorClient(mqtt.Client):
+class MagicMirrorClient(mqtt.client.Client):
 
     def __init__(self):
         super().__init__(mqtt.CallbackAPIVersion.VERSION2, "MagicMirror")

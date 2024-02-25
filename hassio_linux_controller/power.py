@@ -24,6 +24,6 @@ def _reboot():
         _logger.error(f"Reboot failed with exit code {exit_code}")
 
 
-def register(client: mqtt.Client):
+def register(client: mqtt.MagicMirrorClient):
     client.add_callback("hassio/power/shutdown", _shutdown)
     client.add_callback("hassio/power/reboot", _reboot)
