@@ -15,7 +15,7 @@ class Client(mqtt.Client):
     def _on_message(self, client, userdata, message):
         __logger.info(f"Message received: {message.topic}")
         if message.topic in self._calback_list:
-            self._calback_list[message.topic](message.payload)
+            self._calback_list[message.topic]()
 
     def add_callback(self, topic, callback):
         self._calback_list[topic] = callback

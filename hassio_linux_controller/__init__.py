@@ -35,7 +35,7 @@ mqttc.username_pw_set(
     env.config.mqtt_username,
     env.config.mqtt_password,
 )
-# mqttc.on_log = lambda client, userdata, level, buf: _logger.info(buf)
+mqttc.on_log = lambda client, userdata, level, buf: _logger.info(buf)
 
 try:
     mqttc.loop_forever()
