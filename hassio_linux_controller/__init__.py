@@ -22,6 +22,9 @@ def register(client: mqtt.Client, userdata, flags, reason_code, properties):
     _logger.info(
         f"Register @ mqtt {reason_code=} {properties=} {userdata=} {flags=}"
     )
+    if reason_code.is_failure:
+        _logger.error(f"Failed to register @ mqtt {reason_code=}")
+        return
     display.register(client)
     firefox.register(client)
     power.register(client)
