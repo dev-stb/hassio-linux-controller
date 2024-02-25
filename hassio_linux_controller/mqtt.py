@@ -19,3 +19,4 @@ class Client(mqtt.Client):
 
     def add_callback(self, topic, callback):
         self._calback_list[topic] = callback
+        self.subscribe(topic)
