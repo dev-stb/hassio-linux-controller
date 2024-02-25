@@ -25,7 +25,7 @@ def register(self):
     power.register(self)
 
 
-mqtt.on_connect = register
+mqttc.on_connect = register
 mqttc.connect(
     env.config.mqtt_url,
     env.config.mqtt_port,
@@ -35,6 +35,7 @@ mqttc.username_pw_set(
     env.config.mqtt_username,
     env.config.mqtt_password,
 )
+# mqttc.on_log = lambda client, userdata, level, buf: _logger.info(buf)
 
 try:
     mqttc.loop_forever()
