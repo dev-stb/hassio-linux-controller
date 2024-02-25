@@ -1,17 +1,14 @@
-import os
 import logging
-import time
 import subprocess
 
-import hassio_linux_controller.env as env
-import hassio_linux_controller.api as api
+from hassio_linux_controller import env, mqtt
 
 _logger = logging.getLogger(__name__)
 
 __log_state = None
 
 
-def set_to(on: bool):
+def _set_to(on: bool):
     global __log_state
     global _logger
     set_str = "auto" if on else "off"
@@ -35,8 +32,14 @@ def set_to(on: bool):
                 )
 
 
-def loop_step():
-    if api.get_status_of_switch(env.config.display_entity_id):
-        set_to(True)
-    else:
-        set_to(False)
+def on():
+    _set_to(True)
+
+
+def off():
+    _set_to(False)
+
+
+def register(client: mqtt.Client):
+    client.add_callback("hassio/display/on", on)
+    client.add_callback("hassio/display/off", off)

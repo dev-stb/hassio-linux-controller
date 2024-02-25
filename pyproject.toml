@@ -13,6 +13,7 @@ hassio_lc = 'hassio_linux_controller:main'
 python = "^3.10"
 requests = "^2.31.0"
 pydantic = "^2.4.2"
+paho-mqtt = "^2.0.0"
 
 
 [build-system]

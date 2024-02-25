@@ -10,13 +10,14 @@ class Configuration(BaseModel):
     log_level: str
     url: str
     token: str
-    interval_s: int
     display: str
-    display_entity_id: str
-    invoke_shutdown_entity_id: str
-    invoke_reboot_entity_id: str
-    start_kioskmode_firefox_entity_id: str
     dry_run: bool
+
+    mqtt_url: str = "localhost"
+    mqtt_port: int = 1883
+    mqtt_keepalive: int = 60
+    mqtt_username: str = ""
+    mqtt_password: str = ""
 
     @property
     def headers(self):
@@ -54,40 +55,40 @@ def load() -> None:
         help="Hassio bearer token",
     )
     parser.add_argument(
-        "--interval-s",
-        type=int,
-        default=_get_int_config("INTERVAL_S", 1),
-        help="Interval in seconds",
-    )
-    parser.add_argument(
         "--display",
         type=str,
         default=_get_str_config("DISPLAY", ":0", use_app_prefix=False),
         help="Display ID",
     )
     parser.add_argument(
-        "--display-entity-id",
+        "--mqtt-url",
         type=str,
-        default=_get_str_config("DISPLAY_ENTITY_ID", ""),
-        help="Display entity ID",
+        default=_get_str_config("MQTT_URL", "localhost"),
+        help="MQTT URL",
     )
     parser.add_argument(
-        "--invoke-shutdown-entity-id",
-        type=str,
-        default=_get_str_config("INVOKE_SHUTDOWN_ENTITY_ID", ""),
-        help="Invoke shutdown entity ID",
+        "--mqtt-port",
+        type=int,
+        default=_get_int_config("MQTT_PORT", 1883),
+        help="MQTT port",
     )
     parser.add_argument(
-        "--invoke-reboot-entity-id",
-        type=str,
-        default=_get_str_config("INVOKE_REBOOT_ENTITY_ID", ""),
-        help="Invoke reboot entity ID",
+        "--mqtt-keepalive",
+        type=int,
+        default=_get_int_config("MQTT_KEEPALIVE", 60),
+        help="MQTT keepalive",
     )
     parser.add_argument(
-        "--start-kioskmode-firefox-entity-id",
+        "--mqtt-username",
         type=str,
-        default=_get_str_config("START_KIOSKMODE_FIREFOX_ENTITY_ID", ""),
-        help="Start kioskmode firefox entity ID",
+        default=_get_str_config("MQTT_USERNAME", ""),
+        help="MQTT username",
+    )
+    parser.add_argument(
+        "--mqtt-password",
+        type=str,
+        default=_get_str_config("MQTT_PASSWORD", ""),
+        help="MQTT password",
     )
     parser.add_argument(
         "--dry-run",

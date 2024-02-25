@@ -1,39 +1,33 @@
 import sys
-import time
 import logging
 
-import hassio_linux_controller.env as env
-from .models import HassioError
+from hassio_linux_controller import env
+
+env.load()
+logging.basicConfig(
+    stream=sys.stdout,
+    level=env.config.log_level,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+)
+_logger = logging.getLogger(__name__)
+env.print_config()
+
+from hassio_linux_controller import mqtt
 
 
-def main():
-    try:
-        env.load()
-        logging.basicConfig(
-            stream=sys.stdout,
-            level=env.config.log_level,
-            format="%(asctime)s %(levelname)s %(name)s %(message)s",
-        )
-        _logger = logging.getLogger(__name__)
-        env.print_config()
+mqttc = mqtt.Client()
 
-        import hassio_linux_controller.display as display
-        import hassio_linux_controller.power as power
-        import hassio_linux_controller.firefox as firefox
+mqttc.connect(
+    env.config.mqtt_url,
+    env.config.mqtt_port,
+    env.config.mqtt_keepalive,
+)
+mqttc.username_pw_set(
+    env.config.mqtt_username,
+    env.config.mqtt_password,
+)
 
-        display.loop_step()
-        firefox.loop_step()
-        while True:
-            try:
-                time.sleep(env.config.interval_s)
-                display.loop_step()
-                power.loop_step()
-                firefox.loop_step()
-            except HassioError as e:
-                _logger.exception(e)
-    except KeyboardInterrupt:
-        pass
-
-
-if __name__ == "__main__":
-    main()
+try:
+    mqttc.loop_forever()
+except KeyboardInterrupt:
+    pass

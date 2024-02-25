@@ -1,39 +1,29 @@
 import os
 import logging
 
-
-import hassio_linux_controller.env as env
-import hassio_linux_controller.api as api
-import hassio_linux_controller.display as display
+from hassio_linux_controller import env, mqtt, display
 
 _logger = logging.getLogger(__name__)
 
-__sleep_factor = 60 / env.config.interval_s
-__sleep_counter = 0
+
+def _shutdown():
+    _logger.info("Invoke shutdown")
+    if not env.config.dry_run:
+        exit_code = os.system("shutdown -h +1")
+    if exit_code != 0:
+        _logger.error(f"Shutdown failed with exit code {exit_code}")
+    if exit_code == 0:
+        display.off()
 
 
-def loop_step():
-    global __sleep_counter
-    global __sleep_factor
-    if __sleep_counter < __sleep_factor:
-        __sleep_counter += 1
-        return
-    __sleep_counter = 0
+def _reboot():
+    _logger.info("Invoke reboot")
+    if not env.config.dry_run:
+        exit_code = os.system("shutdown --reboot +1")
+    if exit_code != 0:
+        _logger.error(f"Reboot failed with exit code {exit_code}")
 
-    exit_code = None
-    if api.get_status_of_switch(env.config.invoke_shutdown_entity_id):
-        _logger.info("Invoke shutdown")
-        if not env.config.dry_run:
-            exit_code = os.system("shutdown -h +1")
-        if exit_code != 0:
-            _logger.error(f"Shutdown failed with exit code {exit_code}")
-        api.set_status_of_switch(env.config.invoke_shutdown_entity_id, False)
-        if exit_code == 0:
-            display.off()
-    elif api.get_status_of_switch(env.config.invoke_reboot_entity_id):
-        _logger.info("Invoke reboot")
-        if not env.config.dry_run:
-            exit_code = os.system("shutdown --reboot +1")
-        if exit_code != 0:
-            _logger.error(f"Reboot failed with exit code {exit_code}")
-        api.set_status_of_switch(env.config.invoke_reboot_entity_id, False)
+
+def register(client: mqtt.Client):
+    client.add_callback("hassio/power/shutdown", _shutdown)
+    client.add_callback("hassio/power/reboot", _reboot)

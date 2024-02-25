@@ -8,8 +8,7 @@ redirect_stderr=true
 environment=
     HASSIO_LINUX_CONTROLLER_HASSIO_URL="<< your hassio url >>"
     HASSIO_LINUX_CONTROLLER_HASSIO_BEARER_TOKEN="<< your token >>"
-    HASSIO_LINUX_CONTROLLER_DISPLAY_ENTITY_ID=<< your entity id. e.g: input_boolean.magicmirror_display >>
-    HASSIO_LINUX_CONTROLLER_INVOKE_SHUTDOWN_ENTITY_ID=<< your entity id. e.g: input_boolean.magicmirror_screensaver >>
-    HASSIO_LINUX_CONTROLLER_INVOKE_REBOOT_ENTITY_ID=<< your entity id. e.g: input_boolean.magicmirror_screensaver >>
-
+    HASSIO_LINUX_CONTROLLER_MQTT_URL="<<your mqtt url>>
+    HASSIO_LINUX_CONTROLLER_MQTT_USERNAME="<<your mqtt users name>>
+    HASSIO_LINUX_CONTROLLER_MQTT_PASSWORD="<<your mqtt users password>>
 
