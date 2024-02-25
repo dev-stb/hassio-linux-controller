@@ -19,7 +19,7 @@ mqttc = mqtt.Client()
 
 
 def register(client: mqtt.Client, userdata, flags, reason_code, properties):
-    _logger.info("Register @ mqtt")
+    _logger.info(f"Register @ mqtt {reason_code=}")
     display.register(client)
     firefox.register(client)
     power.register(client)
