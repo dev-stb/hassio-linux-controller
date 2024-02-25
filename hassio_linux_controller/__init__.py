@@ -18,11 +18,11 @@ from hassio_linux_controller import mqtt, power, firefox, display
 mqttc = mqtt.Client()
 
 
-def register(self, *args, **kwargs):
+def register(client: mqtt.Client, userdata, flags, reason_code, properties):
     _logger.info("Register @ mqtt")
-    display.register(self)
-    firefox.register(self)
-    power.register(self)
+    display.register(client)
+    firefox.register(client)
+    power.register(client)
 
 
 mqttc.on_connect = register
