@@ -8,7 +8,7 @@ __logger = logging.getLogger(__name__)
 class Client(mqtt.Client):
 
     def __init__(self):
-        super().__init__(mqtt.CallbackAPIVersion.VERSION2)
+        super().__init__(mqtt.CallbackAPIVersion.VERSION2, "MagicMirror")
         self._calback_list = {}
         self.on_message = self._on_message
         self.on_publish = self._on_publish
