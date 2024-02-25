@@ -15,16 +15,19 @@ env.print_config()
 from hassio_linux_controller import mqtt, power, firefox, display
 
 
-mqttc = mqtt.Client()
+mqttc = mqtt.MagicMirrorClient()
 
 
-def register(client: mqtt.Client, userdata, flags, reason_code, properties):
+def register(
+    client: mqtt.MagicMirrorClient, userdata, flags, reason_code, properties
+):
     _logger.info(
         f"Register @ mqtt {reason_code=} {properties=} {userdata=} {flags=}"
     )
     if reason_code.is_failure:
         _logger.error(f"Failed to register @ mqtt {reason_code=}")
         return
+    _logger.info("Register @ mqtt done")
     display.register(client)
     firefox.register(client)
     power.register(client)
