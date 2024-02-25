@@ -12,11 +12,20 @@ logging.basicConfig(
 _logger = logging.getLogger(__name__)
 env.print_config()
 
-from hassio_linux_controller import mqtt
+from hassio_linux_controller import mqtt, power, firefox, display
 
 
 mqttc = mqtt.Client()
 
+
+def register(self):
+    _logger.info("Register @ mqtt")
+    display.register(self)
+    firefox.register(self)
+    power.register(self)
+
+
+mqtt.on_connect = register
 mqttc.connect(
     env.config.mqtt_url,
     env.config.mqtt_port,
